@@ -1,0 +1,4 @@
+#!/bin/bash
+scp main.py theresia:taxonomic-help
+scp qml/*.qml theresia:taxonomic-help/qml
+#scp img/*.png theresia:taxonomic-help/img
