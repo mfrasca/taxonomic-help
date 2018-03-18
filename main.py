@@ -65,13 +65,43 @@ class RpnApp(QApplication):
     def get_version(self):
         return str(self.version) + "-" + str(self.build)
 
-    @Slot(str, result=str)
-    def get_taxonomic_derivation(self, epithet):
+    def make_phonetic(self, term):
+        import re
+        epithet = term.lower();  # ignore case
+        epithet = epithet.replace("-", "");  # remove hyphen
+        epithet = re.sub("c+([yie])", "z\\1", epithet);  # palatal c sounds like z
+        epithet = re.sub("g([ie])", "j\\1", epithet);  # palatal g sounds like j
+        epithet = re.sub("ph", "f", epithet);  # ph sounds like f
+        epithet = epithet.replace("v", "f");  # v sounds like f # fricative (voiced or not)
+
+        epithet = epithet.replace("h", "");  # h sounds like nothing
+        epithet = re.sub("[gcq]", "k", epithet);  # g, c, q sound like k # guttural
+        epithet = re.sub("[xz]", "s", epithet);  # x, z sound like s
+        epithet = epithet.replace("ae", "e");  # ae sounds like e
+        epithet = re.sub("[ye]", "i", epithet);  # y, e sound like i
+        epithet = re.sub("[ou]", "u", epithet);  # o, u sound like u # so we only have a, i, u
+        epithet = re.sub("[aiu]([aiu])[aiu]*", "\\1", epithet);  # remove diphtongs
+        epithet = re.sub("(.)\\1", "\\1", epithet);  # doubled letters sound like single
+        return epithet
+        
+    
+    @Slot(str, bool, result=str)
+    def get_taxonomic_derivation(self, search_term, phonetic):
         import sqlite3
 
         cn = sqlite3.connect("/home/user/MyDocs/.botany/taxonomy.db")
         cr = cn.cursor()
-        cr.execute("select epithet, authorship, accepted_id, parent_id from taxon where rank=5 and epithet like '%s%%'" % epithet)
+        if phonetic:
+            search_term = self.make_phonetic(search_term)
+            search_column = 'metaphone'
+        else:
+            search_column = 'epithet'
+        print search_column, search_term
+
+        cr.execute("select epithet, authorship, accepted_id, parent_id from taxon "
+                   "where rank=5 and %s like '%s%%' "
+                   "order by epithet" %
+                   (search_column, search_term))
 
         rankname = {0: 'ordo', 1: 'familia', 2: 'subfamilia', 3: 'tribus', 4: 'subtribus', 5: 'genus'}
 
@@ -94,8 +124,7 @@ class RpnApp(QApplication):
 
             result.append(u'————————')
 
-        return u'|'.join(result)
-        #return result
+        return json.dumps(result)
         
 
 ####################################################################################################

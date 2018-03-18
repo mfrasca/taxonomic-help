@@ -40,45 +40,89 @@ Page {
         newObject.text = text
     }
 
-    Text {
-        id: display_label
-        text: "lookup genus"
-        font.pixelSize: 28
+    Row {
+        width: parent.width
+        anchors {
+            top: display_box.bottom
+            bottom: parent.bottom
+        }
+        Flickable {
+            anchors.fill: parent
+	    contentWidth: parent.width
+	    contentHeight: results.height + 20	    
+	
+            Column {
+                id: results
+                width: parent.width
+            }
+        }
+    }
+    Item {
+        Rectangle {
+            anchors.fill: parent
+            color: "#50f840"
+        }
+        id: display_box
+        width: parent.width
+        height: lookup_text.height + display_label.height + 6 + 6 + 6
         anchors {
             left: parent.left
             top: parent.top
         }
-    }
-
-    Row {
-        id: display_box
-        width: parent.width
-        height: 64
-        anchors {
-            left: parent.left
-            top: display_label.bottom
+        Text {
+            id: display_label
+            text: "lookup genus"
+            height: 42
+            font.pixelSize: 30
+            anchors {
+                left: parent.left
+                top: parent.top
+                leftMargin: 12
+                topMargin: 6
+            }
         }
+
         TextField {
             id: lookup_text
             font.pixelSize: 48
-            width: parent.width - 64
-            height: parent.height
+            width: parent.width - 64 - 6 - 6 - 6
+            height: 64
             anchors {
+                top: display_label.bottom
+                topMargin: 6
+                left: parent.left
                 leftMargin: 6
+            }
+        }
+        CheckBox {
+            id: phonetic
+            text: "phonetic"
+            checked: false
+            anchors {
+                top: parent.top
+                topMargin: 6
+                right: parent.right
+                rightMargin: 6
             }
         }
         Button {
             id: display_fgh
             font.pixelSize: 48
             text: "?"
-            height: parent.height
+            height: 64
             width: 64
+            anchors {
+                top: display_label.bottom
+                topMargin: 6
+                left: lookup_text.right
+                leftMargin: 6
+            }
             onClicked: {
                 for(var i = results.children.length; i > 0 ; i--) {
                     results.children[i - 1].destroy()
                 }
 
-                var l = app.get_taxonomic_derivation(lookup_text.text).split('|')
+                var l = eval(app.get_taxonomic_derivation(lookup_text.text, phonetic.checked))
                 for (i in l) {
                     addResultLine(results, l[i])
                 }
@@ -86,15 +130,4 @@ Page {
         }
     }
 
-    Flickable {
-        id: scroll_me
-        contentHeight: results.height
-        anchors {
-            top: display_box.bottom
-        }
-        Column {
-            id: results
-            width: parent.width
-        }
-    }
 }
