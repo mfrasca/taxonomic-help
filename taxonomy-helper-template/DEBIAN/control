@@ -3,7 +3,7 @@ Version: VERSION
 Architecture: all
 Maintainer: Mario Frasca <mario@anche.no>
 Depends: python2.6
-Installed-Size: 1600
+Installed-Size: 1460
 Homepage: http://github.com/mfrasca/taxonomic-help/
 Description: taxonomic reminder for MeeGo.
  Are you a botanist, you deal with scientific plant names, you need to be
