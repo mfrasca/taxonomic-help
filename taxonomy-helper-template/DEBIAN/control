@@ -1,0 +1,15 @@
+Package: taxonomy-helper
+Version: VERSION
+Architecture: all
+Maintainer: Mario Frasca <mario@anche.no>
+Depends: python2.6
+Installed-Size: 2000
+Homepage: http://github.com/mfrasca/taxonomic-help/
+Description: taxonomic reminder for MeeGo.
+ Are you a botanist, you deal with scientific plant names, you need to be
+ correct and complete when you name a plant, and there's plant species that
+ make you doubt about spelling and authorship?  Then this is going to be of
+ great help.
+ As an example: type 'rincodio' and have your N9 inform you it's actually
+ Rhynchodium, author C. Presl, but considered a synonym of Bituminaria,
+ Heist. ex Fabr., in the Fabaceae family.
