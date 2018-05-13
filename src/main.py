@@ -27,7 +27,7 @@ PROGRAM_NAME = "taxonomic-help"
 class RpnApp(QApplication):
     "Reverse Polish Notation class"
 
-    root = "/opt/taxonomic-help/"
+    root = "/opt/taxonomy-helper/"
     version = "??"
     build = "?"
 
@@ -89,7 +89,7 @@ class RpnApp(QApplication):
     def get_taxonomic_derivation(self, search_term, phonetic):
         import sqlite3
 
-        cn = sqlite3.connect("/home/user/MyDocs/.botany/taxonomy.db")
+        cn = sqlite3.connect("/opt/taxonomy-helper/assets/taxonomy.db")
         cr = cn.cursor()
         if phonetic:
             search_term = self.make_phonetic(search_term)

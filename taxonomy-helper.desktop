@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=taxonomy
+Comment=the botanist's best friend
+Exec=/usr/bin/invoker --type=e --single-instance /opt/taxonomy-helper/main.py
+Icon=/opt/taxonomy-helper/img/icon80.png
+Terminal=false
+Type=Application

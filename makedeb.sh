@@ -19,14 +19,14 @@ find $PACKAGE_NAME-$VERSION -name ".placeholder" -exec rm {} \;
 sed -i 's/VERSION/'$VERSION'/g' $PACKAGE_NAME-$VERSION/DEBIAN/control
 
 # copy current files to target dir
-cp -p n9-app.desktop $PACKAGE_NAME-$VERSION/usr/share/applications/
-cp -a main.py img qml assets * $PACKAGE_NAME-$VERSION/opt/$PACKAGE_NAME/
+cp -p $PACKAGE_NAME.desktop $PACKAGE_NAME-$VERSION/usr/share/applications/
+cp -a src/* $PACKAGE_NAME-$VERSION/opt/$PACKAGE_NAME/
 
 # don't distribute emacs backup files
 find $PACKAGE_NAME-$VERSION -name "*~" -exec rm {} \;
 
 # HERE we make the deb file - files inside deb must be owned by root
-fakeroot bash -c 'chown -R root.root '$PACKAGE_NAME'-'$VERSION'/[a-z]*; dpkg -b '$PACKAGE_NAME'-'$VERSION
+fakeroot bash -c 'chown -R root.root '$PACKAGE_NAME'-'$VERSION'; dpkg -b '$PACKAGE_NAME'-'$VERSION
 
 # target dir is really a temporary dir, so remove it now
 rm -fr $PACKAGE_NAME-$VERSION 2>/dev/null
